@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Management - Rayhana Restaurant</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Menu Management</h1>
+            <ul class="admin-nav">
+                <li><a href="index.html" target="_blank">View Website</a></li>
+                <li><a href="admin.html">Dashboard</a></li>
+                <li><a href="admin-menu.html">Menu Management</a></li>
+                <li><button id="logout-btn">Logout</button></li>
+            </ul>
+        </div>
+    </header>
+
+    <main class="container">
+        <div id="messages"></div>
+
+        <!-- Login Form (same as in admin.html) -->
+        <div id="login-form" class="card login-container">
+            <h2>Admin Login</h2>
+            <form>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+
+        <!-- Admin Content -->
+        <div id="admin-content" style="display: none;">
+            <!-- Add/Edit Menu Item Form -->
+            <div id="add-menu" class="card">
+                <h2>Add/Edit Menu Item</h2>
+                <form id="menu-form">
+                    <div class="form-group">
+                        <label for="menu-name">Item Name</label>
+                        <input type="text" id="menu-name" name="menu-name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="menu-description">Description</label>
+                        <textarea id="menu-description" name="menu-description" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="menu-price">Price (MAD)</label>
+                        <input type="number" id="menu-price" name="menu-price" min="0" step="5" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="menu-category">Category</label>
+                        <select id="menu-category" name="menu-category" required>
+                            <option value="">Select a category</option>
+                            <option value="Tagines">Tagines</option>
+                            <option value="Couscous">Couscous</option>
+                            <option value="Grills">Grills</option>
+                            <option value="Pastries">Pastries</option>
+                            <option value="Beverages">Beverages</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="menu-image">Item Image</label>
+                        <input type="file" id="menu-image" name="menu-image" accept="image/*">
+                        <div id="image-preview" class="image-preview">
+                            <div class="image-preview-placeholder">Image preview will appear here</div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit">Add Menu Item</button>
+                </form>
+            </div>
+            
+            <!-- Menu Items List -->
+            <div class="card">
+                <h2>Menu Items</h2>
+                <div id="menu-items-container">
+                    <!-- Menu items will be displayed here via JavaScript -->
+                    <p>Loading menu items...</p>
+                </div>
+            </div>
+            
+            <!-- Export/Import -->
+            <div class="card">
+                <h2>Backup & Restore</h2>
+                <p>Export your menu data for backup or import previous data:</p>
+                <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                    <button id="export-btn" onclick="exportMenuData()">Export Menu Data</button>
+                    <div class="form-group" style="flex-grow: 1;">
+                        <label for="import-file">Import Menu Data</label>
+                        <input type="file" id="import-file" accept=".json">
+                    </div>
+                    <button id="import-btn" onclick="importMenuData()">Import</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Rayhana Fast Food Restaurant. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/storage.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/menu.js"></script>
+    <script>
+        // Additional functions for export/import
+        function exportMenuData() {
+            const menuItems = JSON.parse(localStorage.getItem('menuItems')) || [];
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(menuItems));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "rayhana_menu_" + new Date().toISOString().slice(0,10) + ".json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+            showMessage('Menu data exported successfully!', 'success');
+        }
+        
+        function importMenuData() {
+            const fileInput = document.getElementById('import-file');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                showMessage('Please select a file to import.', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (Array.isArray(data)) {
+                        localStorage.setItem('menuItems', JSON.stringify(data));
+                        displayMenuItems();
+                        showMessage('Menu data imported successfully!', 'success');
+                    } else {
+                        showMessage('Invalid data format.', 'error');
+                    }
+                } catch (err) {
+                    showMessage('Error importing data: ' + err.message, 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+    </script>
+</body>
+</html>

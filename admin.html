@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Rayhana Restaurant</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Rayhana Admin Panel</h1>
+            <ul class="admin-nav">
+                <li><a href="index.html" target="_blank">View Website</a></li>
+                <li><a href="admin.html">Dashboard</a></li>
+                <li><a href="admin-menu.html">Menu Management</a></li>
+                <li><button id="logout-btn">Logout</button></li>
+            </ul>
+        </div>
+    </header>
+
+    <main class="container">
+        <div id="messages"></div>
+
+        <!-- Login Form -->
+        <div id="login-form" class="card login-container">
+            <h2>Admin Login</h2>
+            <form>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+
+        <!-- Admin Content (hidden until login) -->
+        <div id="admin-content" style="display: none;">
+            <div class="card">
+                <h2>Dashboard</h2>
+                <p>Welcome to the Rayhana Restaurant Admin Panel!</p>
+                <p>Use the navigation links above to manage your restaurant website.</p>
+                
+                <div class="dashboard-stats">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="admin-menu.html">Manage Menu Items</a></li>
+                        <li><a href="admin-orders.html">View Orders</a></li>
+                        <li><a href="admin-settings.html">Site Settings</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Rayhana Fast Food Restaurant. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/storage.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
